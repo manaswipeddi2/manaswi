@@ -1,0 +1,354 @@
+locals {
+  thresholds = {
+    CPUUtlizationThreshold               = "${min(max(var.cpu_utilization_Average_threshold, 0), 100)}"
+    ElasticsearchRequestsThreshold       =
+    SearchableDocumentsThreshold         =
+    ClusterStatusGreenThreshold          =
+    ClusterStatusYellowThreshold         =
+    ClusterStatusRedThreshold            =    
+    NodesAverageThreshold                =
+    DeletedDocumentsThreshold            =
+    FreeStorageSpaceThreshold            =
+    ClusterUsedSpaceThreshold            =
+    ClusterIndexWritesBlockedThreshold   =
+    JVMMemoryPressureThreshold           =
+    AutomatedSnapshotFailureThreshold    =
+    CPUCreditBalanceThreshold            =
+    KibanaHealthyNodesThreshold          =
+    KMSKeyErrorThreshold                 =
+    KMSKeyInaccessibleThreshold          =
+    InvalidHostHeaderRequestsThreshold   =
+  }  
+ }
+resource "aws_cloudwatch_metric_alarm" "cpu_utlization" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: CPU utlization"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CPUUtlization"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["CPUUtlizationThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "elastic_search_requests" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Elastic search requests"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "ElasticsearchRequests"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "${local.thresholds["ElasticsearchRequestsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = 
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "searchable_documents" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Searchable documents"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "SearchableDocuments"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["SearchableDocumentsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cluster_status_green" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Cluster status green"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "ClusterStatusGreen"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["ClusterStatusGreenThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cluster_status_yellow" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Cluster status yellow"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "ClusterStatusYellow"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["ClusterStatusYellowThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cluster_status_red" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Cluster status red"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "ClusterStatusRed"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["ClusterStatusRedThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "nodes" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: nodes"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "Nodes"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["NodesThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "deleted_documents" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Deleted documents"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "DeletedDocuments"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "${local.thresholds["DeletedDocumentsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "free_storage_space" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Free storage space"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "FreeStorageSpace"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["FreeStorageSpaceThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cluster_used_space" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Cluster used space"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "ClusterUsedSpace"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["ClusterUsedSpaceThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier =
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cluster_index_writes_blocked" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Cluster index writes blocked"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "ClusterIndexWritesBlocked"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Maximum"
+  threshold           = "${local.thresholds["ClusterIndexWritesBlockedThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "JVM_memory_pressure" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: JVM memory pressure"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "JVMMemoryPressure"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Maximum"
+  threshold           = "${local.thresholds["JVMMemoryPressureThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "automated_snapshot_failure" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Automated snapshot failure"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "AutomatedSnapshotFailure"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Maximum"
+  threshold           = "${local.thresholds["AutomatedSnapshotFailureThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cpu_credit_balance" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: CPU credit balance"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CPUCreditBalance"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Minimum"
+  threshold           = "${local.thresholds["CPUCreditBalanceThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "kibana_healthy_nodes" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Kibana healthy nodes"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "KibanaHealthyNodes"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Minimum"
+  threshold           = "${local.thresholds["KibanaHealthyNodesThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "kMS_key_error" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: KMS key error"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "KMSKeyError"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Minimum"
+  threshold           = "${local.thresholds["KMSKeyErrorThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "KMS_key_inaccessible" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: KMS key inaccessible"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "KMSKeyInaccessible"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Maximumm"
+  threshold           = "${local.thresholds["KMSKeyInaccessibleThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "invalid_host_header_requests" {
+  count               = "${length(var.es_instance_list)}"
+  alarm_name          = "${var.es_instance_list[count.index]}: Invalid host header requests"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "InvalidHostHeaderRequests"
+  namespace           = "AWS/ElasticSearch"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "${local.thresholds["InvalidHostHeaderRequestsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = 
+
+dimensions {     
+    DBInstanceIdentifier = "${var.es_instance_list[count.index]}"
+  }
+}
+
+
+
+
+ 
+
+
+
