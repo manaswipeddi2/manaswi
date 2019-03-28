@@ -1,0 +1,308 @@
+locals {
+  thresholds = {
+    CPUUtilizationThreshold            =
+    FreeableMemoryAverageThreshold     =
+    SwapUsageAverageThreshold          =
+    NetworkBytesInAverageThreshold     =
+    NetworkBytesOutAverageThreshold    = 
+    CurrentConnectionsThreshold        =
+    EvictionsSumThreshold              =
+    ReclaimedSumThreshold              =
+    CacheHitsSumThreshold              =
+    CacheMissesSumThreshold            =
+    ReplicationBytesSumThreshold       =
+    ReplicationLagAverageThreshold     =
+    BytesUsedForCacheSumThreshold      =
+    CurrentItemsThreshold              =  
+    CacheHitsThreshold                 =
+    CacheMissesThreshold               =
+   }
+  } 
+resource "aws_cloudwatch_metric_alarm" "cpu_utilization" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: CPU utlization"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CPUUtlization"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["CPUUtlizationThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "freeable_memory" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Freeable memory"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "FreeableMemory"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["FreeableMemoryThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier ="${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "swap_usage" {
+  count               = "${length(var.elasticache_instance_list)}"   
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Swap usage"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "SwapUsage"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["SwapUsageThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "network_bytes_in" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Network bytes in"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "NetworkBytesIn"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["NetworkBytesInThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "network_bytes_out" {
+  count               = "${length(var.elasticache_instance_list)}"  
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Network bytes out"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "NetworkBytesOut"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "${local.thresholds["NetworkBytesOutThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "current_connections" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Current connections"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CurrentConnections"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = ${local.thresholds["CurrentConnectionsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "evictions" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Evictions"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "Evictions"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = ${local.thresholds["EvictionsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "reclaimed" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Reclaimed"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "Reclaimed"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = ${local.thresholds["ReclaimedThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cache_hits" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: CacheHits"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CacheHits"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "sum"
+  threshold           = ${local.thresholds["CacheHitsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cache_misses" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Cache misses"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "CacheMisses"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = ${local.thresholds["CacheMissesThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "replication_bytes" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: replication bytes"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "ReplicationBytes"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = ${local.thresholds["ReplicationBytesThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "replication_lag" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Replication lag"
+  comparison_operator =
+  evaluation_periods  = "1"
+  metric_name         = "ReplicationLag"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Average"
+  threshold           =  ${local.thresholds["ReplicationLagThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "bytes_used_for_cache" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Bytes used for cache"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "BytesUsedForCache"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           =  ${local.thresholds["BytesUsedForCacheThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "current_items" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Current items"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CurrentItems"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           =  ${local.thresholds["CurrentItemsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "cache_hits" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: Cache hits"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CacheHits"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           =  ${local.thresholds["CacheHitsThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
+resource "aws_cloudwatch_metric_alarm" "Cache_misses" {
+  count               = "${length(var.elasticache_instance_list)}"
+  alarm_name          = "${var.elasticache_instance_list[count.index]}: CacheMisses"
+  comparison_operator =
+  evaluation_periods  = "1" 
+  metric_name         = "CacheMisses"
+  namespace           = "AWS/ElastiCache"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           =  ${local.thresholds["CacheMissesThreshold"]}"
+  alarm_description   =
+  alarm_actions       = ["${var.sns_topic_arn}"] 
+  ok_actions          = ["${var.sns_topic_arn}"] 
+
+  dimensions {     
+    DBInstanceIdentifier = "${var.elasticache_instance_list[count.index]}"
+  }
+}
